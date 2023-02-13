@@ -17,7 +17,7 @@ public class Main {
     public static void main(String[] args) throws IOException {
         //task1();
         //task2();
-        task3();
+        //task3();
         task4();
         task5();
         task6();
@@ -63,7 +63,9 @@ public class Main {
 
     private static void task4() throws IOException {
         List<Animal> animals = Util.getAnimals();
-        //        animals.stream() Продолжить ...
+        System.out.println(animals.stream()
+                .filter(animal -> animal.getGender().equals("Female"))
+                .count());
 
     }
 
