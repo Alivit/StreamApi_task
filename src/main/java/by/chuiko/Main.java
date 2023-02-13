@@ -23,7 +23,7 @@ public class Main {
         //task6();
         //task7();
         //task8();
-        task9();
+        //task9();
         task10();
         task11();
         task12();
@@ -107,7 +107,9 @@ public class Main {
 
     private static void task10() throws IOException {
         List<Animal> animals = Util.getAnimals();
-        //        animals.stream() Продолжить ...
+        System.out.println("Ответ: " + animals.stream()
+                .mapToInt(animal -> animal.getAge())
+                .sum());
     }
 
     private static void task11() throws IOException {
