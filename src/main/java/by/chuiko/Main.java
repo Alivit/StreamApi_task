@@ -20,7 +20,7 @@ public class Main {
         //task3();
         //task4();
         //task5();
-        task6();
+        //task6();
         task7();
         task8();
         task9();
@@ -84,7 +84,8 @@ public class Main {
 
     private static void task7() throws IOException {
         List<Animal> animals = Util.getAnimals();
-        //        animals.stream() Продолжить ...
+        System.out.println("Ответ: " + animals.stream()
+                .noneMatch(animal -> animal.getOrigin().equals("Oceania")));
     }
 
     private static void task8() throws IOException {
