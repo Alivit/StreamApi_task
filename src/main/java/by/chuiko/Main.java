@@ -24,7 +24,7 @@ public class Main {
         //task7();
         //task8();
         //task9();
-        task10();
+        //task10();
         task11();
         task12();
         task13();
@@ -39,16 +39,16 @@ public class Main {
                 .sorted(comparing(Animal::getAge))
                 .skip(14)
                 .limit(7)
-                .forEach(s -> System.out.println(s));
+                .forEach(System.out::println);
     }
 
     private static void task2() throws IOException {
         List<Animal> animals = Util.getAnimals();
         animals.stream()
-                .filter(animal -> animal.getOrigin().equals("Japanese") && animal.getGender().equals("Female"))
+                .filter(animal -> "Japanese".equals(animal.getOrigin()) && "Female".equals(animal.getGender()))
                 .map(m -> "порода: " + m.getBread().toUpperCase(Locale.ROOT) + " страна: "
                         + m.getOrigin() + " пол: " + m.getGender())
-                .forEach(s -> System.out.println(s));
+                .forEach(System.out::println);
 
     }
 
@@ -56,15 +56,15 @@ public class Main {
         List<Animal> animals = Util.getAnimals();
         animals.stream()
                 .filter(animal -> animal.getAge() > 30 && animal.getOrigin().charAt(0) == 'A')
-                .map(m -> m.getOrigin())
+                .map(Animal::getOrigin)
                 .distinct()
-                .forEach(s -> System.out.println(s));
+                .forEach(System.out::println);
     }
 
     private static void task4() throws IOException {
         List<Animal> animals = Util.getAnimals();
         System.out.println("Ответ: " + animals.stream()
-                .filter(animal -> animal.getGender().equals("Female"))
+                .filter(animal -> "Female".equals(animal.getGender()))
                 .count());
 
     }
@@ -73,19 +73,19 @@ public class Main {
         List<Animal> animals = Util.getAnimals();
         System.out.println("Ответ: " + animals.stream()
                 .filter(animal -> animal.getAge() >= 20 && animal.getAge() <= 30)
-                .anyMatch(animal -> animal.getOrigin().equals("Hungarian")));
+                .anyMatch(animal -> "Hungarian".equals(animal.getOrigin())));
     }
 
     private static void task6() throws IOException {
         List<Animal> animals = Util.getAnimals();
         System.out.println("Ответ: " + animals.stream()
-                .allMatch(animal -> animal.getGender().equals("Male") && animal.getGender().equals("Female")));
+                .allMatch(animal -> "Male".equals(animal.getGender()) && "Female".equals(animal.getGender())));
     }
 
     private static void task7() throws IOException {
         List<Animal> animals = Util.getAnimals();
         System.out.println("Ответ: " + animals.stream()
-                .noneMatch(animal -> animal.getOrigin().equals("Oceania")));
+                .noneMatch(animal -> "Oceania".equals(animal.getOrigin())));
     }
 
     private static void task8() throws IOException {
@@ -93,7 +93,7 @@ public class Main {
         System.out.println("Ответ: " + animals.stream()
                 .sorted(comparing(Animal::getGender))
                 .limit(100)
-                .map(animal -> animal.getAge())
+                .map(Animal::getAge)
                 .max(Integer::compare).get());
     }
 
@@ -108,13 +108,14 @@ public class Main {
     private static void task10() throws IOException {
         List<Animal> animals = Util.getAnimals();
         System.out.println("Ответ: " + animals.stream()
-                .mapToInt(animal -> animal.getAge())
-                .sum());
+                .mapToInt(Animal::getAge).sum());
     }
 
     private static void task11() throws IOException {
         List<Animal> animals = Util.getAnimals();
-        //        animals.stream() Продолжить ...
+        System.out.println("Ответ: " + animals.stream()
+                .filter(animal -> "Indonesian".equals(animal.getOrigin()))
+                .mapToInt(Animal::getAge).average().getAsDouble());
     }
 
     private static void task12() throws IOException {
