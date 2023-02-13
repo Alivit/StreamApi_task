@@ -21,7 +21,7 @@ public class Main {
         //task4();
         //task5();
         //task6();
-        task7();
+        //task7();
         task8();
         task9();
         task10();
@@ -90,7 +90,11 @@ public class Main {
 
     private static void task8() throws IOException {
         List<Animal> animals = Util.getAnimals();
-        //        animals.stream() Продолжить ...
+        System.out.println("Ответ: " + animals.stream()
+                .sorted(comparing(Animal::getGender))
+                .limit(100)
+                .map(animal -> animal.getAge())
+                .max(Integer::compare).get());
     }
 
     private static void task9() throws IOException {

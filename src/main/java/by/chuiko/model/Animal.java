@@ -66,4 +66,5 @@ public class Animal {
         return "Animal{id=" + id + ", bread='" + bread + "', age=" + age + ", origin='" + origin + "', gender='"
             + gender +  "'}";
     }
+
 }
