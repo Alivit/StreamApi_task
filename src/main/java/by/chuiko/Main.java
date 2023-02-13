@@ -16,8 +16,8 @@ import static java.util.Comparator.comparing;
 public class Main {
     public static void main(String[] args) throws IOException {
         //task1();
-        task2();
-        //task3();
+        //task2();
+        task3();
         task4();
         task5();
         task6();
@@ -46,15 +46,19 @@ public class Main {
         List<Animal> animals = Util.getAnimals();
         animals.stream()
                 .filter(animal -> animal.getOrigin().equals("Japanese") && animal.getGender().equals("Female"))
-                .map(b -> "порода: " + b.getBread().toUpperCase(Locale.ROOT) + " страна: "
-                        + b.getOrigin() + " пол: " + b.getGender())
+                .map(m -> "порода: " + m.getBread().toUpperCase(Locale.ROOT) + " страна: "
+                        + m.getOrigin() + " пол: " + m.getGender())
                 .forEach(s -> System.out.println(s));
 
     }
 
     private static void task3() throws IOException {
         List<Animal> animals = Util.getAnimals();
-        //        animals.stream() Продолжить ...
+        animals.stream()
+                .filter(animal -> animal.getAge() > 30 && animal.getOrigin().charAt(0) == 'A')
+                .map(m -> m.getOrigin())
+                .distinct()
+                .forEach(s -> System.out.println(s));
     }
 
     private static void task4() throws IOException {
