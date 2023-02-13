@@ -22,7 +22,7 @@ public class Main {
         //task5();
         //task6();
         //task7();
-        task8();
+        //task8();
         task9();
         task10();
         task11();
@@ -99,7 +99,10 @@ public class Main {
 
     private static void task9() throws IOException {
         List<Animal> animals = Util.getAnimals();
-        //        animals.stream() Продолжить ...
+        System.out.println("Ответ: " + animals.stream()
+                .map(animal -> animal.getBread().toCharArray().length)
+                .max(Integer::compare).get());
+
     }
 
     private static void task10() throws IOException {
