@@ -18,7 +18,7 @@ public class Main {
         //task1();
         //task2();
         //task3();
-        task4();
+        //task4();
         task5();
         task6();
         task7();
@@ -63,7 +63,7 @@ public class Main {
 
     private static void task4() throws IOException {
         List<Animal> animals = Util.getAnimals();
-        System.out.println(animals.stream()
+        System.out.println("Ответ: " + animals.stream()
                 .filter(animal -> animal.getGender().equals("Female"))
                 .count());
 
@@ -71,7 +71,9 @@ public class Main {
 
     private static void task5() throws IOException {
         List<Animal> animals = Util.getAnimals();
-        //        animals.stream() Продолжить ...
+        System.out.println("Ответ: " + animals.stream()
+                .filter(animal -> animal.getAge() >= 20 && animal.getAge() <= 30)
+                .anyMatch(animal -> animal.getOrigin().equals("Hungarian")));
     }
 
     private static void task6() throws IOException {
