@@ -19,7 +19,7 @@ public class Main {
         //task2();
         //task3();
         //task4();
-        task5();
+        //task5();
         task6();
         task7();
         task8();
@@ -78,7 +78,8 @@ public class Main {
 
     private static void task6() throws IOException {
         List<Animal> animals = Util.getAnimals();
-        //        animals.stream() Продолжить ...
+        System.out.println("Ответ: " + animals.stream()
+                .allMatch(animal -> animal.getGender().equals("Male") && animal.getGender().equals("Female")));
     }
 
     private static void task7() throws IOException {
