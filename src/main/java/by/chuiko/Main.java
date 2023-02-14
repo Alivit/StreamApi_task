@@ -19,7 +19,7 @@ import static java.util.Comparator.comparing;
 public class Main {
     public static void main(String[] args) throws IOException {
         //task1();
-        //task2();
+        task2();
         //task3();
         //task4();
         //task5();
@@ -29,7 +29,7 @@ public class Main {
         //task9();
         //task10();
         //task11();
-        task12();
+        //task12();
         task13();
         task14();
         task15();
@@ -49,8 +49,7 @@ public class Main {
         List<Animal> animals = Util.getAnimals();
         animals.stream()
                 .filter(animal -> "Japanese".equals(animal.getOrigin()) && "Female".equals(animal.getGender()))
-                .map(m -> "порода: " + m.getBread().toUpperCase(Locale.ROOT) + " страна: "
-                        + m.getOrigin() + " пол: " + m.getGender())
+                .peek(animal -> animal.setBread(animal.getBread().toUpperCase(Locale.ROOT)))
                 .forEach(System.out::println);
 
     }
