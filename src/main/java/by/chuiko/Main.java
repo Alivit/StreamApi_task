@@ -8,8 +8,11 @@ import by.chuiko.model.Person;
 import by.chuiko.util.Util;
 
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Locale;
+import java.util.stream.Stream;
 
 import static java.util.Comparator.comparing;
 
@@ -25,7 +28,7 @@ public class Main {
         //task8();
         //task9();
         //task10();
-        task11();
+        //task11();
         task12();
         task13();
         task14();
@@ -120,7 +123,13 @@ public class Main {
 
     private static void task12() throws IOException {
         List<Person> people = Util.getPersons();
-//        Продолжить...
+        people.stream()
+                .filter(person -> "Male".equals(person.getGender()))
+                .filter(person -> ChronoUnit.YEARS.between(person.getDateOfBirth(), LocalDate.of(2023, 2, 14)) >= 18)
+                .filter(person -> ChronoUnit.YEARS.between(person.getDateOfBirth(), LocalDate.of(2023, 2, 14)) <= 27)
+                .sorted(comparing(Person::getRecruitmentGroup))
+                .limit(200)
+                .forEach(System.out::println);
     }
 
     private static void task13() throws IOException {
