@@ -1,9 +1,6 @@
 package by.chuiko;
 
-import by.chuiko.model.Animal;
-import by.chuiko.model.Flower;
-import by.chuiko.model.House;
-import by.chuiko.model.Person;
+import by.chuiko.model.*;
 import by.chuiko.util.Util;
 
 import java.io.IOException;
@@ -32,7 +29,8 @@ public class Main {
         //task12();
         //task13();
         //task14();
-        task15();
+        //task15();
+        task16();
     }
 
     private static void task1() throws IOException {
@@ -132,18 +130,21 @@ public class Main {
     }
 
     private static void task13() throws IOException {
-//        List<House> houses = Util.getHouses();
-//        Stream<Stream<Person>> people1 = houses.stream()
-//                .filter(house -> "Hospital".equals(house.getBuildingType()))
-//                .map(house -> house.getPersonList().stream());
-//        Stream<Stream<Person>> people2 = houses.stream()
-//                .filter(house -> "Civil building".equals(house.getBuildingType()))
-//                .map(house -> house.getPersonList().stream());
-//        people2.map(personStream -> personStream
-//                        .filter(person -> ChronoUnit.YEARS.between(person.getDateOfBirth(), LocalDate.of(2023, 2, 14)) <= 18))
-//                .forEach(person -> person.forEach(System.out::println));
-//        Stream<Person> peopleNew = people1;
-//        Stream.concat(people1,people2).forEach(personStream1 -> personStream1.forEach(System.out::println));
+        List<House> houses = Util.getHouses();
+        Stream<Stream<Person>> people1 = houses.stream()
+                .filter(house -> "Hospital".equals(house.getBuildingType()))
+                .map(house -> house.getPersonList().stream());
+        Stream<Stream<Person>> people2 = houses.stream()
+                .filter(house -> "Civil building".equals(house.getBuildingType()))
+                .map(house -> house.getPersonList().stream().filter(person ->
+                        (ChronoUnit.YEARS.between((person.getDateOfBirth()), LocalDate.of(2023, 2, 14)) >= 63
+                                && person.getGender().equals("Male"))
+                        || (ChronoUnit.YEARS.between((person.getDateOfBirth()), LocalDate.of(2023, 2, 14)) >= 58
+                                && person.getGender().equals("Female"))
+                        || ChronoUnit.YEARS.between(person.getDateOfBirth(), LocalDate.of(2023, 2, 14)) <= 18));
+        Stream.concat(people1,people2)
+                .limit(500)
+                .forEach(personStream -> personStream.forEach(System.out::println));
 
 
     }
@@ -168,6 +169,10 @@ public class Main {
                 .filter(flower -> flower.isShadePreferred() && (flower.getFlowerVaseMaterial().stream()
                         .anyMatch(o -> "Glass".equals(o) || "Aluminum".equals(o) || "Steel".equals(o))))
                 .mapToDouble(flower -> flower.getPrice() + ((flower.getWaterConsumptionPerDay() * 365 * 5)/1000 * 1.39)).sum());
+
+    }
+    private static void task16() throws IOException {
+        List<Student> students = Util.getStudents();
 
     }
 }
