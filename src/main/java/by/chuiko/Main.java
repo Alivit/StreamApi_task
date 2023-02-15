@@ -27,8 +27,8 @@ public class Main {
         //task10();
         //task11();
         //task12();
-        //task13();
-        task14();
+        task13();
+        //task14();
         //task15();
         //task16();
     }
@@ -227,17 +227,15 @@ public class Main {
     private static void task16() throws IOException {
         List<Student> students = Util.getStudents();
 
-        double sumDormitory1 = students.stream() //сумма оплаты иностранных студентов за общежитие 1
+        List<Student> foreigners = students.stream() //сумма оплаты иностранных студентов за общежитие 1
                 .filter(student -> "Salzburg".equals(student.getCity()) || "Oklahoma".equals(student.getCity())
                         || "Sofia".equals(student.getCity()) || "Kingston".equals(student.getCity())
-                        || "Porto".equals(student.getCity()) || "Jerusalem".equals(student.getCity()))
-                .limit(400).mapToDouble(student -> 44.4).sum();
+                        || "Porto".equals(student.getCity()) || "Jerusalem".equals(student.getCity())).toList();
+        double sumDormitory1 = foreigners.stream().limit(400).mapToDouble(student -> 44.4).sum();
+        students.removeAll(foreigners);
 
         Supplier<Stream<Student>> studentsBel = () -> students.stream() //студенты которые живут в Беларуси
-                .filter(student -> !"Salzburg".equals(student.getCity()) && !"Oklahoma".equals(student.getCity())
-                        && !"Sofia".equals(student.getCity()) && !"Kingston".equals(student.getCity())
-                        && !"Porto".equals(student.getCity()) && !"Jerusalem".equals(student.getCity()) && !"Minsk".equals(student.getCity()))
-                .filter(student -> student.getAverageRating() >= 6)
+                .filter(student -> !"Minsk".equals(student.getCity()) && student.getAverageRating() >= 6)
                 .sorted(comparing(Student::isPrivileges).thenComparing(Student::getAverageRating).reversed());
 
         double sumDormitory2 = studentsBel.get() //сумма оплаты белорусских студентов за общежитие 2
