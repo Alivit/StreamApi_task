@@ -173,6 +173,7 @@ public class Main {
     }
     private static void task16() throws IOException {
         List<Student> students = Util.getStudents();
+        students.stream().forEach(System.out::println);
 
     }
 }
