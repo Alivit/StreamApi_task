@@ -9,6 +9,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
+import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 import static java.util.Comparator.comparing;
@@ -173,7 +174,28 @@ public class Main {
     }
     private static void task16() throws IOException {
         List<Student> students = Util.getStudents();
-        students.stream().forEach(System.out::println);
-
+        double sumDormitory1 = students.stream() //сумма оплаты иностранных студентов за общежитие 1
+                .filter(student -> "Salzburg".equals(student.getCity()) || "Oklahoma".equals(student.getCity())
+                        || "Sofia".equals(student.getCity()) || "Kingston".equals(student.getCity())
+                        || "Porto".equals(student.getCity()) || "Jerusalem".equals(student.getCity()))
+                .limit(400).mapToDouble(student -> 44.4).sum();
+        Supplier<Stream<Student>> studentsBel = () -> students.stream() //студенты которые живут в Беларуси
+                .filter(student -> !"Salzburg".equals(student.getCity()) && !"Oklahoma".equals(student.getCity())
+                        && !"Sofia".equals(student.getCity()) && !"Kingston".equals(student.getCity())
+                        && !"Porto".equals(student.getCity()) && !"Jerusalem".equals(student.getCity()) && !"Minsk".equals(student.getCity()))
+                .filter(student -> student.getAverageRating() >= 6)
+                .sorted(comparing(Student::isPrivileges).thenComparing(Student::getAverageRating).reversed());
+        double sumDormitory2 = studentsBel.get() //сумма оплаты белорусских студентов за общежитие 2
+                .filter(student -> ChronoUnit.YEARS.between(student.getDateOfBirth(), LocalDate.of(2023, 2, 14)) <= 18)
+                .limit(100).mapToDouble(student -> 44.4).sum();
+        Stream<Student> studentsOutcast = studentsBel.get() //студенты до 18 лет которые не попали в 2 общежите
+                .filter(student -> ChronoUnit.YEARS.between(student.getDateOfBirth(), LocalDate.of(2023, 2, 14)) <= 18)
+                .skip(100);
+        Stream<Student> studentsDormitory3_4 = studentsBel.get() //студенты после 18 лет
+                .filter(student -> ChronoUnit.YEARS.between(student.getDateOfBirth(), LocalDate.of(2023, 2, 14)) > 18);
+        double sumDormitory3_4 = Stream.concat(studentsOutcast, studentsDormitory3_4) //сумма оплаты белорусских студентов за общежитие 3-4
+                .limit(370)
+                .mapToDouble(student -> 29.6).sum();
+        System.out.println((sumDormitory1 + sumDormitory2 + sumDormitory3_4) * 10);
     }
 }

@@ -97,7 +97,7 @@ public class Student {
     @Override
     public String toString() {
         return "Student{id=" + id + ", firstName='" + firstName + ", lastName='" + lastName + ", dateOfBirth="
-                + dateOfBirth + ",  gender='" + gender + ", city='" + city + ", averageRating='" + averageRating
-                + ", privileges='" + privileges;
+                + dateOfBirth + ",  gender='" + gender + ", city='" + city + ", averageRating=" + averageRating
+                + ", privileges=" + privileges;
     }
 }
