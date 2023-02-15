@@ -6,7 +6,6 @@ import by.chuiko.util.Util;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
 import java.util.function.Supplier;
@@ -141,9 +140,9 @@ public class Main {
                 .filter(house -> "Civil building".equals(house.getBuildingType()))
                 .map(house -> house.getPersonList().stream()
                         .filter(person -> (ChronoUnit.YEARS.between((person.getDateOfBirth()), LocalDate.of(2023, 2, 14)) >= 63
-                                && person.getGender().equals("Male"))
+                                && "Male".equals(person.getGender()))
                                 || (ChronoUnit.YEARS.between((person.getDateOfBirth()), LocalDate.of(2023, 2, 14)) >= 58
-                                && person.getGender().equals("Female"))
+                                && "Female".equals(person.getGender()))
                                 || ChronoUnit.YEARS.between(person.getDateOfBirth(), LocalDate.of(2023, 2, 14)) <= 18));
 
         Stream<Stream<Person>> people3 = houses.stream()
@@ -156,9 +155,9 @@ public class Main {
                 .filter(house -> "Civil building".equals(house.getBuildingType()))
                 .map(house -> house.getPersonList().stream()
                         .filter(person -> (ChronoUnit.YEARS.between((person.getDateOfBirth()), LocalDate.of(2023, 2, 14)) >= 58
-                                && !person.getGender().equals("Female")
+                                && !"Female".equals(person.getGender())
                                 || ChronoUnit.YEARS.between((person.getDateOfBirth()), LocalDate.of(2023, 2, 14)) >= 63
-                                && (!person.getGender().equals("Male") && !person.getGender().equals("Female")))));
+                                && (!"Male".equals(person.getGender()) && !"Female".equals(person.getGender())))));
 
         Stream.concat(Stream.concat(Stream.concat(people1,people2),people3),people4)
                 .limit(500)
@@ -168,13 +167,49 @@ public class Main {
     }
 
     private static void task14() throws IOException {
-//        List<Car> cars = Util.getCars();
-//        Stream<Car> turk = cars.stream()
-//                .filter(car -> "Jaguar".equals(car.getCarMake()) || car.getColor().equals("White"));
-//        turk.forEach(System.out::println);
-//        Stream<Car> usb = cars.stream()
-//                .filter(car -> !"Jaguar".equals(car.getCarMake()) && car.getColor().equals("White"))
-//                .filter(car -> car.getMass() <= 1500 || car.getCarMake().equals("BMW"))
+        List<Car> cars = Util.getCars();
+        List<Car> turkmenistan = cars.stream()
+                .filter(car -> "Jaguar".equals(car.getCarMake()) || car.getColor().equals("White")).toList();
+        double turkmenistanCost = turkmenistan.stream().mapToDouble(car -> car.getMass()/1000 * 7.14).sum();
+        System.out.println("Туркменистан сумм. стоимость: " + turkmenistanCost);
+        cars.removeAll(turkmenistan);
+
+        List<Car> uzbekistan = cars.stream()
+                .filter(car -> car.getMass() <= 1500 || car.getCarMake().equals("BMW") || car.getCarMake().equals("Lexus")
+                        || car.getCarMake().equals("Chrysler") || car.getCarMake().equals("Toyota")).toList();
+        double uzbekistanCost = uzbekistan.stream().mapToDouble(car -> car.getMass()/1000 * 7.14).sum();
+        System.out.println("Узбекистан сумм. стоимость: " + uzbekistanCost);
+        cars.removeAll(uzbekistan);
+
+        List<Car> kazakhstan = cars.stream()
+                .filter(car -> (car.getMass() >= 4000 && car.getColor().equals("Black"))
+                        || car.getCarMake().equals("GMC") || car.getCarMake().equals("Dodge") ).toList();
+        double kazakhstanCost = kazakhstan.stream().mapToDouble(car -> car.getMass()/1000 * 7.14).sum();
+        System.out.println("Казахстан сумм. стоимость: " + kazakhstanCost);
+        cars.removeAll(kazakhstan);
+
+        List<Car> kyrgyzstan = cars.stream()
+                .filter(car -> car.getReleaseYear() < 1982
+                        || car.getCarModel().equals("Civic") || car.getCarModel().equals("Cherokee") ).toList();
+        double kyrgyzstanSum = kyrgyzstan.stream().mapToDouble(car -> car.getMass()/1000 * 7.14).sum();
+        System.out.println("Кыргызстан сумм. стоимость: " + kyrgyzstanSum);
+        cars.removeAll(kyrgyzstan);
+
+        List<Car> russia = cars.stream()
+                .filter(car -> (!car.getColor().equals("Yellow") && !car.getColor().equals("Red")
+                        && !car.getCarMake().equals("Green") && !car.getCarMake().equals("Blue"))
+                        || car.getPrice() > 40000).toList();
+        double russiaSum = russia.stream().mapToDouble(car -> car.getMass()/1000 * 7.14).sum();
+        System.out.println("Россия сумм. стоимость: " + russiaSum);
+        cars.removeAll(russia);
+
+        List<Car> mongolia = cars.stream()
+                .filter(car -> car.getVin().contains("59")).toList();
+        double mongoliaSum = mongolia.stream().mapToDouble(car -> car.getMass()/1000 * 7.14).sum();
+        System.out.println("Монголия сумм. стоимость: " + mongoliaSum);
+
+        System.out.format("Общую выручку логистической кампании: %f", turkmenistanCost + uzbekistanCost + kazakhstanCost
+        + russiaSum + kyrgyzstanSum + mongoliaSum);
 
     }
 
@@ -183,7 +218,7 @@ public class Main {
         System.out.println("Ответ: " + flowers.stream()
                 .sorted(comparing(Flower::getOrigin).reversed().thenComparing(Flower::getPrice).reversed()
                         .thenComparing(Flower::getWaterConsumptionPerDay).reversed())
-                .filter(flower -> flower.getCommonName().charAt(0) >= 'C' && flower.getCommonName().charAt(0) <= 'S')
+                .filter(flower -> flower.getCommonName().matches("^[C-S].*"))
                 .filter(flower -> flower.isShadePreferred() && (flower.getFlowerVaseMaterial().stream()
                         .anyMatch(o -> "Glass".equals(o) || "Aluminum".equals(o) || "Steel".equals(o))))
                 .mapToDouble(flower -> flower.getPrice() + ((flower.getWaterConsumptionPerDay() * 365 * 5)/1000 * 1.39)).sum());
