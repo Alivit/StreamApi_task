@@ -29,9 +29,9 @@ public class Main {
         //task11();
         //task12();
         //task13();
-        //task14();
+        task14();
         //task15();
-        task16();
+        //task16();
     }
 
     private static void task1() throws IOException {
@@ -132,18 +132,35 @@ public class Main {
 
     private static void task13() throws IOException {
         List<House> houses = Util.getHouses();
+
         Stream<Stream<Person>> people1 = houses.stream()
                 .filter(house -> "Hospital".equals(house.getBuildingType()))
                 .map(house -> house.getPersonList().stream());
+
         Stream<Stream<Person>> people2 = houses.stream()
                 .filter(house -> "Civil building".equals(house.getBuildingType()))
-                .map(house -> house.getPersonList().stream().filter(person ->
-                        (ChronoUnit.YEARS.between((person.getDateOfBirth()), LocalDate.of(2023, 2, 14)) >= 63
+                .map(house -> house.getPersonList().stream()
+                        .filter(person -> (ChronoUnit.YEARS.between((person.getDateOfBirth()), LocalDate.of(2023, 2, 14)) >= 63
                                 && person.getGender().equals("Male"))
-                        || (ChronoUnit.YEARS.between((person.getDateOfBirth()), LocalDate.of(2023, 2, 14)) >= 58
+                                || (ChronoUnit.YEARS.between((person.getDateOfBirth()), LocalDate.of(2023, 2, 14)) >= 58
                                 && person.getGender().equals("Female"))
-                        || ChronoUnit.YEARS.between(person.getDateOfBirth(), LocalDate.of(2023, 2, 14)) <= 18));
-        Stream.concat(people1,people2)
+                                || ChronoUnit.YEARS.between(person.getDateOfBirth(), LocalDate.of(2023, 2, 14)) <= 18));
+
+        Stream<Stream<Person>> people3 = houses.stream()
+                .filter(house -> "Civil building".equals(house.getBuildingType()))
+                .map(house -> house.getPersonList().stream()
+                        .filter(person -> (ChronoUnit.YEARS.between((person.getDateOfBirth()), LocalDate.of(2023, 2, 14)) >= 18
+                        && ChronoUnit.YEARS.between((person.getDateOfBirth()), LocalDate.of(2023, 2, 14)) <= 58)));
+
+        Stream<Stream<Person>> people4 = houses.stream()
+                .filter(house -> "Civil building".equals(house.getBuildingType()))
+                .map(house -> house.getPersonList().stream()
+                        .filter(person -> (ChronoUnit.YEARS.between((person.getDateOfBirth()), LocalDate.of(2023, 2, 14)) >= 58
+                                && !person.getGender().equals("Female")
+                                || ChronoUnit.YEARS.between((person.getDateOfBirth()), LocalDate.of(2023, 2, 14)) >= 63
+                                && (!person.getGender().equals("Male") && !person.getGender().equals("Female")))));
+
+        Stream.concat(Stream.concat(Stream.concat(people1,people2),people3),people4)
                 .limit(500)
                 .forEach(personStream -> personStream.forEach(System.out::println));
 
@@ -174,25 +191,31 @@ public class Main {
     }
     private static void task16() throws IOException {
         List<Student> students = Util.getStudents();
+
         double sumDormitory1 = students.stream() //сумма оплаты иностранных студентов за общежитие 1
                 .filter(student -> "Salzburg".equals(student.getCity()) || "Oklahoma".equals(student.getCity())
                         || "Sofia".equals(student.getCity()) || "Kingston".equals(student.getCity())
                         || "Porto".equals(student.getCity()) || "Jerusalem".equals(student.getCity()))
                 .limit(400).mapToDouble(student -> 44.4).sum();
+
         Supplier<Stream<Student>> studentsBel = () -> students.stream() //студенты которые живут в Беларуси
                 .filter(student -> !"Salzburg".equals(student.getCity()) && !"Oklahoma".equals(student.getCity())
                         && !"Sofia".equals(student.getCity()) && !"Kingston".equals(student.getCity())
                         && !"Porto".equals(student.getCity()) && !"Jerusalem".equals(student.getCity()) && !"Minsk".equals(student.getCity()))
                 .filter(student -> student.getAverageRating() >= 6)
                 .sorted(comparing(Student::isPrivileges).thenComparing(Student::getAverageRating).reversed());
+
         double sumDormitory2 = studentsBel.get() //сумма оплаты белорусских студентов за общежитие 2
                 .filter(student -> ChronoUnit.YEARS.between(student.getDateOfBirth(), LocalDate.of(2023, 2, 14)) <= 18)
                 .limit(100).mapToDouble(student -> 44.4).sum();
+
         Stream<Student> studentsOutcast = studentsBel.get() //студенты до 18 лет которые не попали в 2 общежите
                 .filter(student -> ChronoUnit.YEARS.between(student.getDateOfBirth(), LocalDate.of(2023, 2, 14)) <= 18)
                 .skip(100);
+
         Stream<Student> studentsDormitory3_4 = studentsBel.get() //студенты после 18 лет
                 .filter(student -> ChronoUnit.YEARS.between(student.getDateOfBirth(), LocalDate.of(2023, 2, 14)) > 18);
+
         double sumDormitory3_4 = Stream.concat(studentsOutcast, studentsDormitory3_4) //сумма оплаты белорусских студентов за общежитие 3-4
                 .limit(370)
                 .mapToDouble(student -> 29.6).sum();
